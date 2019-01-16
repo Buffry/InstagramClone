@@ -1,6 +1,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    <!-- Designs the Layout of the Bottom Navigation by calling bottom_navigation_menu, which contains icons for the menu -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"

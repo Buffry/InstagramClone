@@ -1,5 +1,5 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <!-- Creates Layout of the top tab bar on Home Page  -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
