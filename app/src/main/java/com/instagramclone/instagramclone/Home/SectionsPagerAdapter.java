@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class that stores fragments for tabs
+ * Class that stores and manages fragments for top tabs
  */
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
