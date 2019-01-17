@@ -1,6 +1,7 @@
 package com.instagramclone.instagramclone.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.instagramclone.instagramclone.R;
 import com.instagramclone.instagramclone.Utils.BottomNavigationViewHelper;
@@ -20,11 +24,15 @@ public class ProfileActivity extends AppCompatActivity {
 
     private Context mContext = ProfileActivity.this;
 
+    private ProgressBar mProgressBar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Log.d(TAG, "onCreate: started.");
+        mProgressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
+        mProgressBar.setVisibility(View.GONE);
 
         setupBottomNavigationView();
         setupToolbar();
@@ -32,26 +40,27 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     /*
-    Profile toolbar setup with cases for whichever item is selected on the top toolbar in the
-    Profile Activity
+    Profile top toolbar setup
      */
     private void setupToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolBar);
         setSupportActionBar(toolbar);
 
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+        /*
+    Allows selection of profile menu at the top right corner of profile top toolbar to
+    segue to the AccountSettingsActivity
+     */
+        ImageView profileMenu = (ImageView)findViewById(R.id.profileMenu);
+        profileMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Log.d(TAG, "onMenuItemClick: clicked menu item: " + item);
-
-                switch (item.getItemId()){
-                    case R.id.profileMenu: // case for when profile menu is selected
-                        Log.d(TAG, "onMenuItemClick: Navigating to Profile Preferences.");
-                }
-
-                return false;
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: navigating to account settings.");
+                Intent intent = new Intent(mContext, AccountSettingsActivity.class);
+                startActivity(intent);
             }
         });
+
 
     }
 
@@ -68,10 +77,5 @@ public class ProfileActivity extends AppCompatActivity {
         menuItem.setChecked(true);
     }
 
-    // function to create profile_menu
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.profile_menu, menu);
-        return true;
-    }
+
 }

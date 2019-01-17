@@ -1,5 +1,5 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Creates TopBar that displays username and settings icon on Profile Activity  -->
+    <!-- Creates TopToolBar that displays username and settings(profileMenu) icon on Profile Activity  -->
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -14,6 +14,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <!-- Creates Section of TopToolBar that displays username -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -23,6 +24,16 @@
                     android:textColor="@color/black"
                     android:layout_marginStart="15dp"
                     android:id="@+id/profileName"/>
+
+                <!-- Creates Section of TopToolBar that displays Settings(profileMenu) icon -->
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/profileMenu"
+                    android:src="@drawable/ic_profile_menu"/>
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>

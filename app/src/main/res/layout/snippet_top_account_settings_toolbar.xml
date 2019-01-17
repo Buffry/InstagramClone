@@ -1,0 +1,48 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Creates TopToolBar that displays "Options" and Back Arrow on Account Settings(Profile Menu)
+    which is accessible from Profile Activity  -->
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/white_grey_border_bottom">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profileMenuToolBar">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- Creates Section of TopToolBar that displays Back Arrow icon -->
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/backArrow"
+                    android:src="@drawable/ic_back_arrow"/>
+
+                <!-- Creates Section of TopToolBar that displays "Options" -->
+                <TextView
+                    android:layout_toRightOf="@+id/backArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Options"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="5dp"
+                    android:id="@+id/profileMenuTitle"/>
+
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+</merge>
