@@ -12,7 +12,9 @@ import android.view.MenuItem;
 import com.instagramclone.instagramclone.R;
 import com.instagramclone.instagramclone.Utils.BottomNavigationViewHelper;
 import com.instagramclone.instagramclone.Utils.SectionsPagerAdapter;
+import com.instagramclone.instagramclone.Utils.UniversalImageLoader;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -28,8 +30,19 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
 
+        initImageLoader();
+
         setupBottomNavigationView();
         setupViewPager();
+
+    }
+
+    /*
+    * image loader initializer
+     */
+    private void initImageLoader() {
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
 
     }
 
