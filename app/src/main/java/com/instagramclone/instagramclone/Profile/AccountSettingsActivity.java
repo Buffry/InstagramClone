@@ -52,7 +52,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         setupBottomNavigationView();
         setupFragment();
 
-        // setup for the backarrow for navigating from "AccountSettingsActivity" to "PrrofileActivity"
+        // setup for the backarrow for navigating from "AccountSettingsActivity" to "ProfileActivity"
         ImageView backArrow = (ImageView) findViewById(R.id.backArrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override

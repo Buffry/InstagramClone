@@ -108,6 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.GONE);
         profilePhoto = (ImageView) findViewById(R.id.profile_photo);
     }
+
     /*
     Profile top toolbar setup
      */
