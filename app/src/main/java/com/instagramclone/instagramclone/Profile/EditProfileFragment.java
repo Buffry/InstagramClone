@@ -44,6 +44,8 @@ public class EditProfileFragment extends Fragment {
 
 
 
+
+
     /*
     sets the url of image to be displayed in mProfilePhoto
      */

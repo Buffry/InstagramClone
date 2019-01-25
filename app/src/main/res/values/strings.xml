@@ -3,4 +3,6 @@
 
     <string name="edit_profile_fragment">Edit Profile</string>
     <string name="sign_out_fragment">Sign Out</string>
+    <string name="auth_success">Authentication Successful.</string>
+    <string name="auth_failed">Authentication Failed.</string>
 </resources>
