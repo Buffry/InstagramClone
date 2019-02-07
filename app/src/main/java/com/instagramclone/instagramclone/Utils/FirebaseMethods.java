@@ -40,7 +40,7 @@ public class FirebaseMethods {
             userID = mAuth.getCurrentUser().getUid();
         }
     }
-    
+    /*
     public boolean checkIfUsernameExists(String username, DataSnapshot dataSnapshot){
         Log.d(TAG, "checkIfUsernameExists: checking if " + username + " already exists");
 
@@ -59,6 +59,70 @@ public class FirebaseMethods {
             }
         }
         return false;
+    }
+    */
+
+    /*
+    update username in "users" node and "user_account_settings" node
+     */
+    public void updateUsername(String username){
+        Log.d(TAG, "updateUsername: updating username to: " + username);
+        myRef.child(mContext.getString(R.string.dbname_users))
+                .child(userID)
+                .child(mContext.getString(R.string.field_username))
+                .setValue(username);
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userID)
+                .child(mContext.getString(R.string.field_username))
+                .setValue(username);
+    }
+
+    /*
+    update email in "users" node and "user_account_settings" node
+     */
+    public void updateEmail(String email){
+        Log.d(TAG, "updateUsername: updating email to: " + email);
+        myRef.child(mContext.getString(R.string.dbname_users))
+                .child(userID)
+                .child(mContext.getString(R.string.field_email))
+                .setValue(email);
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userID)
+                .child(mContext.getString(R.string.field_email))
+                .setValue(email);
+    }
+
+    /*
+    update'user_account_settings' node for the current user
+     */
+    public void updateUserAccountSettings(String displayName, String website, String description, long phoneNumber){
+
+        if(displayName != null){
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_display_name))
+                    .setValue(displayName);
+        }
+        if(website != null){
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_website))
+                    .setValue(website);
+        }
+        if(description != null){
+            myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_description))
+                    .setValue(description);
+        }
+        if(phoneNumber != 0){
+            myRef.child(mContext.getString(R.string.dbname_users))
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_phone_number))
+                    .setValue(phoneNumber);
+        }
+
+
     }
 
 
