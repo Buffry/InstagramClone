@@ -8,26 +8,61 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.instagramclone.instagramclone.Models.User;
+import com.instagramclone.instagramclone.Models.UserAccountSettings;
+import com.instagramclone.instagramclone.Models.UserSettings;
 import com.instagramclone.instagramclone.R;
+import com.instagramclone.instagramclone.Utils.FirebaseMethods;
 import com.instagramclone.instagramclone.Utils.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfileFragment extends Fragment {
 
     private static final String TAG = "EditProfileFragment";
 
-    private ImageView mProfilePhoto; //mProfilePhoto is an image view
+    //Firebase Authentication
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
+    private FirebaseMethods mFirebaseMethods;
+    private String userID;
+
+
+    //EditProfile fragment widgets
+    private EditText mDisplayName, mUsername, mWebsite, mDescription, mEmail, mPhoneNumber;
+    private TextView mChangeProfilePhoto;
+    private CircleImageView mProfilePhoto; //mProfilePhoto is an image view
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_editprofile, container, false);
-        mProfilePhoto = (ImageView) view.findViewById(R.id.profile_photo); // mProfilePhoto refers to the imageView in profile_photo in the EditProfile fragment
+        mProfilePhoto = (CircleImageView) view.findViewById(R.id.profile_photo); // mProfilePhoto refers to the imageView in profile_photo in the EditProfile fragment
+        mDisplayName = (EditText) view.findViewById(R.id.display_name);
+        mUsername = (EditText) view.findViewById(R.id.username);
+        mWebsite = (EditText) view.findViewById(R.id.website);
+        mDescription = (EditText) view.findViewById(R.id.description);
+        mEmail = (EditText) view.findViewById(R.id.email);
+        mPhoneNumber = (EditText) view.findViewById(R.id.phoneNumber);
+        mChangeProfilePhoto = (TextView) view.findViewById(R.id.changeProfilePhoto);
+        mFirebaseMethods = new FirebaseMethods(getActivity());
 
-
-        setProfileImage();
+        //setProfileImage();
+        setupFirebaseAuth();
 
         //back arrow for navigating back to "ProfileActivity"
         ImageView backArrow = (ImageView) view.findViewById(R.id.backArrow);
@@ -42,16 +77,127 @@ public class EditProfileFragment extends Fragment {
         return view;
     }
 
+    /*
+    Collects information in widgets and saves to database
+    Before saving, checks if new username is unique
+     */
+    private void saveProfileSettings(){
+        final String displayName = mDisplayName.getText().toString();
+        final String username = mUsername.getText().toString();
+        final String website = mWebsite.getText().toString();
+        final String description = mDescription.getText().toString();
+        final String email = mEmail.getText().toString();
+        final long phoneNumber = Long.parseLong(mPhoneNumber.getText().toString());
 
 
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                User user = new User();
+                for(DataSnapshot ds: dataSnapshot.child(getString(R.string.dbname_users)).getChildren()){
+                    if(ds.getKey().equals(userID)){
+                        user.setUsername(ds.getValue(User.class).getUsername());
+                    }
+                }
+                Log.d(TAG, "onDataChange: CURRENT USERNAME: " + user.getUsername());
+
+                //case 1: user did not change their username
+                if(user.getUsername().equals(username)){
+
+                }
+                //case 2: user changed their username therefore check for username uniqueness
+                else{
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void setProfileWidgets(UserSettings userSettings) {
+        //Log.d(TAG, "setProfileWidgets: setting widgets with data retrived from firebase: " + userSettings.toString());
+        //Log.d(TAG, "setProfileWidgets: setting widgets with data retrived from firebase: " + userSettings.getSettings().getUsername());
+
+        //User user = userSettings.getUser();
+        UserAccountSettings settings = userSettings.getSettings();
+
+        UniversalImageLoader.setImage(settings.getProfile_photo(), mProfilePhoto, null, "");
+        mDisplayName.setText(settings.getDisplay_name());
+        mUsername.setText(settings.getUsername());
+        mWebsite.setText(settings.getWebsite());
+        mDescription.setText(settings.getDescription());
+        mEmail.setText(userSettings.getUser().getEmail());
+        mPhoneNumber.setText(String.valueOf(userSettings.getUser().getPhone_number()));
+
+    }
 
 
     /*
-    sets the url of image to be displayed in mProfilePhoto
+   ------------------------------------------- Firebase -----------------------------------------
+    */
+
+    /*
+    set up firebase authentication to check if a user is currently logged in to the app
      */
-    private void  setProfileImage(){
-        Log.d(TAG, "setProfileImage: setting profile image");
-        String imgURL = "cdn.vox-cdn.com/thumbor/W9QjW3HynAcaotTNo45wISHluU8=/0x0:2040x1360/1200x800/filters:focal(857x517:1183x843)/cdn.vox-cdn.com/uploads/chorus_image/image/62857528/wjoel_180413_1777_android_001.0.jpg";
-        UniversalImageLoader.setImage(imgURL, mProfilePhoto, null, "https://");
+    private void setupFirebaseAuth(){
+        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
+
+        mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
+        userID = mAuth.getCurrentUser().getUid();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if (user != null){
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in: " + user.getUid());
+                }else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+
+            }
+        };
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //retrieve user information from the database
+                setProfileWidgets(mFirebaseMethods.getUserSettings(dataSnapshot));
+
+                //retrieve images for the user profile page
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener!= null)
+            mAuth.removeAuthStateListener(mAuthListener);
     }
 }

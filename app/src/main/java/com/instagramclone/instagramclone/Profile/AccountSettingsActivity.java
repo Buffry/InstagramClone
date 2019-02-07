@@ -1,8 +1,10 @@
 package com.instagramclone.instagramclone.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +18,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.instagramclone.instagramclone.R;
 import com.instagramclone.instagramclone.Utils.BottomNavigationViewHelper;
+import com.instagramclone.instagramclone.Utils.FirebaseMethods;
 import com.instagramclone.instagramclone.Utils.SectionsStatePagerAdapter;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -51,6 +61,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         setupSettingsList();
         setupBottomNavigationView();
         setupFragment();
+        getIncomingIntent();
 
         // setup for the backarrow for navigating from "AccountSettingsActivity" to "ProfileActivity"
         ImageView backArrow = (ImageView) findViewById(R.id.backArrow);
@@ -63,6 +74,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
         });
     }
 
+    private void getIncomingIntent(){
+        Intent intent = getIntent();
+
+        if(intent.hasExtra(getString(R.string.calling_activity))){
+            Log.d(TAG, "getIncomingIntent: getting intent from: " + getString(R.string.profile_activity));
+            setViewPager(pagerAdapter.getFragmentNumber(getString(R.string.edit_profile_fragment)));
+        }
+    }
 
 
     /*
@@ -125,4 +144,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
+
+
 }

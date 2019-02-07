@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -39,22 +40,33 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Log.d(TAG, "onCreate: started.");
-        mProgressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
-        mProgressBar.setVisibility(View.GONE);
 
-        setupBottomNavigationView();
-        setupToolbar();
-        setupActivityWidgets();
-        setProfileImage();
 
-        tempGridSetup();
+        init();
 
+        //setupBottomNavigationView();
+        //setupToolbar();
+        //setupActivityWidgets();
+        //setProfileImage();
+
+        //tempGridSetup();
+
+    }
+    
+    private void init(){
+        Log.d(TAG, "init: inflating " + getString(R.string.profile_fragment));
+
+        ProfileFragment fragment = new ProfileFragment();
+        FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(getString(R.string.profile_fragment));
+        transaction.commit();
     }
 
     /*
     temporary function to display images on the grid in ProfileActivity by calling images from
     an ArrayList of String URLs
-     */
+
     private void tempGridSetup(){
         ArrayList<String> imgURLs = new ArrayList<>();
         imgURLs.add("https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228__340.jpg");
@@ -72,16 +84,17 @@ public class ProfileActivity extends AppCompatActivity {
         setupImageGrid(imgURLs);
 
     }
+    */
 
     /*
     * Sets up the Grid to display the images on the "ProfileActivity"
-     */
+
     private void setupImageGrid(ArrayList<String> imgURLs){
         GridView gridView = (GridView) findViewById(R.id.gridView);
 
         /*
         sets the width of the images in the grid view
-         */
+
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
         int imageWidth = gridWidth/NUM_GRID_COLUMNS;
         gridView.setColumnWidth(imageWidth); // sets columnwidth to imageWidth
@@ -89,29 +102,31 @@ public class ProfileActivity extends AppCompatActivity {
         GridImageAdapter adapter = new GridImageAdapter(mContext, R.layout.layout_grid_imageview, "", imgURLs);
         gridView.setAdapter(adapter);
     }
+    */
 
     /*
     * displays profile image on "ProfileActivity"
-     */
+
     private void setProfileImage(){
         Log.d(TAG, "setProfileImage: setting profile photo");
         String imgURL = "cdn.vox-cdn.com/thumbor/W9QjW3HynAcaotTNo45wISHluU8=/0x0:2040x1360/1200x800/filters:focal(857x517:1183x843)/cdn.vox-cdn.com/uploads/chorus_image/image/62857528/wjoel_180413_1777_android_001.0.jpg";
         UniversalImageLoader.setImage(imgURL, profilePhoto, mProgressBar, "https://");
 
     }
+    */
 
     /*
     * Initializes widgets on the "ProfileActivity"
-     */
+
     private void setupActivityWidgets(){
         mProgressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
         mProgressBar.setVisibility(View.GONE);
         profilePhoto = (ImageView) findViewById(R.id.profile_photo);
     }
-
+    */
     /*
     Profile top toolbar setup
-     */
+
     private void setupToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolBar);
         setSupportActionBar(toolbar);
@@ -120,7 +135,7 @@ public class ProfileActivity extends AppCompatActivity {
         /*
     Allows selection of profile menu at the top right corner of profile top toolbar to
     segue to the AccountSettingsActivity
-     */
+
         ImageView profileMenu = (ImageView)findViewById(R.id.profileMenu);
         profileMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,10 +148,11 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     }
+    */
 
     /*
     Bottom Navigation View Setup
-     */
+
     private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: settingUpBottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
@@ -146,6 +162,6 @@ public class ProfileActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
-
+    */
 
 }
