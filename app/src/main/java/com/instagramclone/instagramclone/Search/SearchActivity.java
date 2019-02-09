@@ -1,15 +1,19 @@
 package com.instagramclone.instagramclone.Search;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.instagramclone.instagramclone.R;
+import com.instagramclone.instagramclone.Share.ShareActivity;
 import com.instagramclone.instagramclone.Utils.BottomNavigationViewHelper;
+import com.instagramclone.instagramclone.Utils.Permissions;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class SearchActivity extends AppCompatActivity {
@@ -25,9 +29,11 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: started.");
 
+
         setupBottomNavigationView();
 
     }
+
 
     /*
     Bottom Navigation View Setup
