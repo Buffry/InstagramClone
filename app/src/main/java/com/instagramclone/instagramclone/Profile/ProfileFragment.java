@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
 
     private static final int ACTIVITY_NUM = 4;
 
-    //Firebase Authentication
+    //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;

@@ -1,5 +1,7 @@
 package com.instagramclone.instagramclone.Share;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,11 +21,18 @@ import android.widget.TextView;
 import com.instagramclone.instagramclone.R;
 import com.instagramclone.instagramclone.Utils.FilePaths;
 import com.instagramclone.instagramclone.Utils.FileSearch;
+import com.instagramclone.instagramclone.Utils.GridImageAdapter;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment {
     private static final String TAG = "GalleryFragment";
+
+    //constants
+    private static final int NUM_GRID_COLUMNS = 3;
 
     //widgets
     private GridView gridView;
@@ -33,7 +42,8 @@ public class GalleryFragment extends Fragment {
 
     //vars
     private ArrayList<String> directories;
-
+    private String mAppend = "file:/";
+    private String mSelectedImage;
 
     @Nullable
     @Override
@@ -62,9 +72,14 @@ public class GalleryFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navigating to the final share screen.");
 
+                Intent intent = new Intent(getActivity(), NextActivity.class);
+                intent.putExtra(getString(R.string.selected_image), mSelectedImage);
+                startActivity(intent);
 
             }
         });
+
+        init();
 
         return view;
     }
@@ -77,10 +92,22 @@ public class GalleryFragment extends Fragment {
             directories = FileSearch.getDirectoryPaths(filePaths.PICTURES);
         }
 
+        //check for other folders inside "/storage/emulated/0/downloads"
+        if(FileSearch.getDirectoryPaths(filePaths.DOWNLOAD) != null){
+            directories.add(filePaths.DOWNLOAD);
+        }
+
         directories.add(filePaths.CAMERA);
 
+        ArrayList<String> directoryNames = new ArrayList<>();
+        for(int i = 0; i < directories.size(); i++){
+            int index = directories.get(i).lastIndexOf("/");
+            String string = directories.get(i).substring(index).replace("/", "");
+            directoryNames.add(string);
+        }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, directories);
+                android.R.layout.simple_spinner_item, directoryNames);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         directorySpinner.setAdapter(adapter);
 
@@ -90,6 +117,7 @@ public class GalleryFragment extends Fragment {
                 Log.d(TAG, "onItemSelected: selected: " + directories.get(position));
 
                 //setup our image grid for the directory chosen
+                setupGridView(directories.get(position));
             }
 
             @Override
@@ -98,5 +126,61 @@ public class GalleryFragment extends Fragment {
             }
         });
 
+    }
+
+
+    private void setupGridView(String selectedDirectory){
+        Log.d(TAG, "setupGridView: directory chosen: " + selectedDirectory);
+        final  ArrayList<String> imgURLs = FileSearch.getFilePaths(selectedDirectory);
+
+        //set the width of columns in the gridView to the image width which is the width of the entire gridView/Number of columns(3)
+        int gridWidth = getResources().getDisplayMetrics().widthPixels;
+        int imageWidth = gridWidth/NUM_GRID_COLUMNS;
+        gridView.setColumnWidth(imageWidth);
+
+        //use the GridImageAdapter to adapt the images to the gridView with append = file:/ (images are called from a file not a web Url in this case)
+        GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview, mAppend, imgURLs);
+        gridView.setAdapter(adapter);
+
+        //set the first image to be displayed when the activity fragment view is inflated
+        setImage(imgURLs.get(0), galleryImage, mAppend);
+        mSelectedImage = imgURLs.get(0);
+        
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick: selected image" + imgURLs.get(position));
+
+                setImage(imgURLs.get(position), galleryImage, mAppend);
+                mSelectedImage = imgURLs.get(position);
+            }
+        });
+    }
+
+    private  void setImage(String imgURL, ImageView image, String append){
+        Log.d(TAG, "setImage: setting image");
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.displayImage(append + imgURL, image, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+                mProgressBar.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 }
