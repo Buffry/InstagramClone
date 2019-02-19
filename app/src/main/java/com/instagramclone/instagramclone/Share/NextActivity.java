@@ -1,6 +1,7 @@
 package com.instagramclone.instagramclone.Share;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ public class NextActivity extends AppCompatActivity {
     private String mAppend = "file:/";
     private int imageCount = 0;
     private String imgUrl;
+    private Bitmap bitmap;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,19 @@ public class NextActivity extends AppCompatActivity {
                 //upload the image to firebase
                 Toast.makeText(NextActivity.this, "Attempting to upload new photo", Toast.LENGTH_SHORT).show();
                 String caption = mCaption.getText().toString();
-                mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, imgUrl);
+
+                if(intent.hasExtra(getString(R.string.selected_image))){
+                    //get imgUrl from galleryFragment
+                    imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+                    //upload image url to firebase
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, imgUrl, null);
+                }else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+                    //get bitmap from photoFragment
+                    bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+                    //upload bitmap to firebase
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, null, bitmap);
+                }
+
 
 
             }
@@ -101,14 +116,25 @@ public class NextActivity extends AppCompatActivity {
     }
 
     /*
-    gets the image url from the incoming intent and displays the chosen image
+    gets the image url or bitmap from the incoming intent and displays the chosen image
      */
     private void setImage(){
-        Intent intent = getIntent();
+        intent = getIntent();
         ImageView image = (ImageView) findViewById(R.id.imageShare);
-        imgUrl = intent.getStringExtra(getString(R.string.selected_image));
-        //UniversalImageLoader can handle Null images so no need to check for Null image
-        UniversalImageLoader.setImage(imgUrl, image, null, mAppend);
+
+        if(intent.hasExtra(getString(R.string.selected_image))){
+            //get imgUrl from galleryFragment
+            imgUrl = intent.getStringExtra(getString(R.string.selected_image));
+            Log.d(TAG, "setImage: got new image url: " + imgUrl);
+            //UniversalImageLoader can handle Null images so no need to check for Null image
+            UniversalImageLoader.setImage(imgUrl, image, null, mAppend);
+        }else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+            //get bitmap from photoFragment
+            bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            Log.d(TAG, "setImage: got new bitmap.");
+            image.setImageBitmap(bitmap);
+        }
+
     }
 
 

@@ -46,6 +46,16 @@ public class ShareActivity extends AppCompatActivity {
     }
 
     /*
+    checks the activity that triggered the ShareActivity to see whether it is from
+    ChangeProfilePhoto button in EditProfileFragment in ProfileActivity
+     */
+    public int getTask(){
+        Log.d(TAG, "getTask: TASK: " + getIntent().getFlags());
+
+        return getIntent().getFlags();
+    }
+
+    /*
     return the current tab number
      */
     public int getCurrentTabNumber(){
@@ -126,7 +136,7 @@ public class ShareActivity extends AppCompatActivity {
         Log.d(TAG, "setupBottomNavigationView: settingUpBottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);

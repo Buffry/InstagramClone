@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.instagramclone.instagramclone.Profile.AccountSettingsActivity;
 import com.instagramclone.instagramclone.R;
 import com.instagramclone.instagramclone.Utils.FilePaths;
 import com.instagramclone.instagramclone.Utils.FileSearch;
@@ -72,9 +73,18 @@ public class GalleryFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navigating to the final share screen.");
 
-                Intent intent = new Intent(getActivity(), NextActivity.class);
-                intent.putExtra(getString(R.string.selected_image), mSelectedImage);
-                startActivity(intent);
+                if(isRootTask()){
+                    Intent intent = new Intent(getActivity(), NextActivity.class);
+                    intent.putExtra(getString(R.string.selected_image), mSelectedImage);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
+                    intent.putExtra(getString(R.string.selected_image), mSelectedImage);
+                    intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+
 
             }
         });
@@ -82,6 +92,18 @@ public class GalleryFragment extends Fragment {
         init();
 
         return view;
+    }
+
+    /*
+    returns true if GalleryFragment is root task
+    returns false if ChangeProfilePhoto button on EditProfileFragment is root task
+     */
+    private boolean isRootTask(){
+        if(((ShareActivity)getActivity()).getTask() == 0){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     private void init(){

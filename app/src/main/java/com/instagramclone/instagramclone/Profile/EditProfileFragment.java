@@ -1,5 +1,6 @@
 package com.instagramclone.instagramclone.Profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ import com.instagramclone.instagramclone.Models.User;
 import com.instagramclone.instagramclone.Models.UserAccountSettings;
 import com.instagramclone.instagramclone.Models.UserSettings;
 import com.instagramclone.instagramclone.R;
+import com.instagramclone.instagramclone.Share.ShareActivity;
 import com.instagramclone.instagramclone.Utils.FirebaseMethods;
 import com.instagramclone.instagramclone.Utils.UniversalImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -264,6 +266,16 @@ ConfirmPasswordDialog.OnConfirmPasswordListener{
         mDescription.setText(settings.getDescription());
         mEmail.setText(userSettings.getUser().getEmail());
         mPhoneNumber.setText(String.valueOf(userSettings.getUser().getPhone_number()));
+
+        mChangeProfilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ShareActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //268435456
+                getActivity().startActivity(intent);
+                getActivity().finish();
+            }
+        });
 
     }
 
