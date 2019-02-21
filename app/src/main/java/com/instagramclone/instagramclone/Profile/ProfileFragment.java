@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -51,6 +52,15 @@ public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
 
+    /*
+    Navigates to PostFragment depending on which activity a post is selected from
+     */
+    public interface OnGridImageSelectedListener{
+        void onGridImageSelected(Photo photo, int activityNumber);
+    }
+
+    OnGridImageSelectedListener mOnGridImageSelectedListener;
+
     private static final int ACTIVITY_NUM = 4;
     private static final int NUM_GRID_COLUNMS = 3;
 
@@ -65,7 +75,7 @@ public class ProfileFragment extends Fragment {
     private TextView mPosts, mFollowers, mFollowing, mDisplayName, mUsername, mWebsite, mDescription;
     private ProgressBar mProgressBar;
     private CircleImageView mProfilePhoto;
-    private GridView gridview;
+    private GridView gridView;
     private Toolbar toolbar;
     private ImageView profileMenu;
     private BottomNavigationViewEx bottomNavigationView;
@@ -85,7 +95,7 @@ public class ProfileFragment extends Fragment {
         mFollowers = (TextView) view.findViewById(R.id.tvFollowers);
         mFollowing = (TextView) view.findViewById(R.id.tvFollowing);
         mProgressBar = (ProgressBar) view.findViewById(R.id.profileProgressBar);
-        gridview = (GridView) view.findViewById(R.id.gridView);
+        gridView = (GridView) view.findViewById(R.id.gridView);
         toolbar = (Toolbar) view.findViewById(R.id.profileToolBar);
         profileMenu = (ImageView) view.findViewById(R.id.profileMenu);
         bottomNavigationView = (BottomNavigationViewEx) view.findViewById(R.id.bottomNavViewBar);
@@ -116,8 +126,21 @@ public class ProfileFragment extends Fragment {
     }
 
     /*
-    Uses a Query to retrieve a users photos from the database then displays the images in the grid view
+    onAttach method for GridImageSelectedListener.
      */
+    @Override
+    public void onAttach(Context context) {
+        try{
+            mOnGridImageSelectedListener = (OnGridImageSelectedListener) getActivity();
+        }catch (ClassCastException e){
+            Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage() );
+        }
+        super.onAttach(context);
+    }
+
+    /*
+        Uses a Query to retrieve a users photos from the database then displays the images in the grid view
+         */
     private void setupGridView(){
         Log.d(TAG, "setupGridView: setting up image grid.");
 
@@ -135,7 +158,7 @@ public class ProfileFragment extends Fragment {
                 //setup image grid
                 int gridWidth = getResources().getDisplayMetrics().widthPixels;
                 int imageWidth = gridWidth/NUM_GRID_COLUNMS;
-                gridview.setColumnWidth(imageWidth);
+                gridView.setColumnWidth(imageWidth);
 
                 ArrayList<String> imgUrls = new ArrayList<String>();
                 for(int i = 0; i < photos.size(); i++){
@@ -144,7 +167,18 @@ public class ProfileFragment extends Fragment {
 
                 GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview,
                         "", imgUrls);
-                gridview.setAdapter(adapter);
+                gridView.setAdapter(adapter);
+
+                /*
+                attaches OnGridImageSelectedListener to the gridView and gets the position of the photo in the photos array and the current activity number
+                 */
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        mOnGridImageSelectedListener.onGridImageSelected(photos.get(position), ACTIVITY_NUM);
+
+                    }
+                });
             }
 
             @Override

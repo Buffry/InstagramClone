@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Creates TopToolBar that displays username and settings(profileMenu) icon on Profile Activity  -->
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -9,36 +10,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/profileToolBar">
-
+            
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <!-- Creates Section of TopToolBar that displays username -->
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/backArrow"
+                    android:src="@drawable/ic_back_arrow"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="seyi.olarot"
                     android:textSize="20sp"
+                    android:layout_toRightOf="@id/backArrow"
+                    android:layout_marginLeft="30dp"
+                    android:text="Photo"
                     android:textColor="@color/black"
-                    android:layout_marginStart="15dp"
-                    android:id="@+id/username"/>
-
-                <!-- Creates Section of TopToolBar that displays Settings(profileMenu) icon -->
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="20dp"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/profileMenu"
-                    android:src="@drawable/ic_ellipses"/>
+                    android:id="@+id/tvBackLabel"/>
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
-        
+
     </android.support.design.widget.AppBarLayout>
-    
 
 </merge>
