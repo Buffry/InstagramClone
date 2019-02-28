@@ -65,7 +65,7 @@
             <!-- Section below profile image containing username, Bio(description) and
             link in bio(website)-->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_below="@id/linLayout"
@@ -80,7 +80,7 @@
                     android:id="@+id/display_name"
                     android:textColor="@color/black"
                     android:textStyle="bold"
-                    android:text="Seyi"
+                    android:text=""
                     android:textSize="16sp" />
 
                 <!-- Textview containing Bio(description) -->
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/description"
                     android:textColor="@color/black"
-                    android:text="I live in Mississauga, ON"
+                    android:text=""
                     android:textSize="16sp"
                     android:layout_marginTop="5dp"/>
 
@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/website"
                     android:textColor="@color/link_blue"
-                    android:text="https://codingwithmitch.com"
+                    android:text=""
                     android:textSize="16sp"
                     android:layout_marginTop="5dp"/>
 

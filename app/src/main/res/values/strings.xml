@@ -25,6 +25,7 @@
     <string name="field_website">website</string>
     <string name="field_display_name">display_name</string>
     <string name="field_phone_number">phone_number</string>
+    <string name="field_user_id">user_id</string>
 
     <!-- Photo Types -->
     <string name="new_photo">new_photo</string>
@@ -49,6 +50,8 @@
     <string name="string_next">Next</string>
     <string name="string_gallery">Gallery</string>
     <string name="string_share">Share</string>
+    <string name="today">TODAY</string>
+    <string name="days_ago">DAYS AGO</string>
 
 
 </resources>
