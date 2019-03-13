@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.design.widget.AppBarLayout
@@ -8,34 +7,41 @@
 
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/profileToolBar">
-            
+
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
                     android:id="@+id/backArrow"
                     android:src="@drawable/ic_backarrow"/>
 
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:text="Comments"
+                    android:layout_toRightOf="@+id/backArrow"
+                    android:layout_marginRight="15dp"
                     android:textSize="20sp"
-                    android:layout_toRightOf="@id/backArrow"
-                    android:layout_marginLeft="30dp"
-                    android:text="Photo"
                     android:textColor="@color/black"
-                    android:id="@+id/tvBackLabel"/>
+                    android:layout_centerVertical="true"
+                    android:id="@+id/tvNext"/>
+
+
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
+
 
 </merge>

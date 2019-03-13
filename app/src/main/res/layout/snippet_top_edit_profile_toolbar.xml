@@ -23,7 +23,7 @@
                     android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
                     android:id="@+id/backArrow"
-                    android:src="@drawable/ic_back_arrow"/>
+                    android:src="@drawable/ic_backarrow"/>
 
                 <!-- Creates Section of TopToolBar that displays "Edit Profile" -->
                 <TextView
